@@ -11,6 +11,18 @@ function updateTime() {
     );
   }
 
+  let cairoElement = document.querySelector("#cairo");
+  if (cairoElement) {
+    let cairoDateElement = cairoElement.querySelector(".date");
+    let cairoTimeElement = cairoElement.querySelector(".time");
+    let cairoTime = moment().tz("Africa/Cairo");
+
+    cairoDateElement.innerHTML = cairoTime.format("MMMM Do, YYYY");
+    cairoTimeElement.innerHTML = cairoTime.format(
+      "h:mm:ss [<small>]A[</small>]"
+    );
+  }
+
   let sydneyElement = document.querySelector("#sydney");
   if (sydneyElement) {
     let sydneyDateElement = sydneyElement.querySelector(".date");
@@ -25,14 +37,15 @@ function updateTime() {
 }
 
 function updateCity(event) {
-  let cityTimeZone = event.target.value;
-  if (cityTimeZone === "current") {
-    cityTimeZone = moment.tz.guess();
-  }
-  let cityName = cityTimeZone.replace("_", " ").split("/")[1];
-  let cityTime = moment().tz(cityTimeZone);
-  let citiesElement = document.querySelector("#cities");
-  citiesElement.innerHTML = `
+  function updateCityTime() {
+    let cityTimeZone = event.target.value;
+    if (cityTimeZone === "current") {
+      cityTimeZone = moment.tz.guess();
+    }
+    let cityName = cityTimeZone.replace("_", " ").split("/")[1];
+    let cityTime = moment().tz(cityTimeZone);
+    let citiesElement = document.querySelector("#cities");
+    citiesElement.innerHTML = `
   <div class="city">
           <div>
             <h2>${cityName}</h2>
@@ -43,6 +56,9 @@ function updateCity(event) {
           )}</div>
         </div>
         <a href="/">All cities</a>`;
+  }
+  updateCityTime();
+  setInterval(updateCityTime, 1000);
 }
 
 updateTime();
